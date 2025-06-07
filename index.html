@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>给特别的人</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            color: #5a3d3d;
+            text-align: center;
+            transition: background 1s;
+        }
+        .container {
+            position: relative;
+            z-index: 10;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.4);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            width: 500px;
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: #ff4d6d;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .heart {
+            position: absolute;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.7;
+            user-select: none;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+        button {
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+        #accept-btn {
+            background-color: #51cf66;
+            color: white;
+            box-shadow: 0 4px 15px rgba(81, 207, 102, 0.4);
+        }
+        #accept-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(81, 207, 102, 0.6);
+        }
+        #reject-btn {
+            background-color: #f8f9fa;
+            color: #495057;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        #reject-btn:hover {
+            transform: translateY(-3px);
+            background-color: #e9ecef;
+        }
+        .result {
+            font-size: 1.4em;
+            margin: 20px 0;
+            min-height: 60px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #happy-result {
+            color: #ff4d6d;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .music-btn {
+            background-color: #748ffc;
+            color: white;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(116, 143, 252, 0.4);
+        }
+        .music-btn:hover {
+            box-shadow: 0 7px 20px rgba(116, 143, 252, 0.6);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>❤️ 给特别的你 ❤️</h1>
+        <p>我积攒了所有勇气，只想告诉你：</p>
+        <p>你的笑容是我每天最期待的风景，</p>
+        <p>和你在一起的每分每秒都让我心动。</p>
+        <p><strong>我喜欢你，可以做我男/女朋友吗？</strong></p>
+        
+        <div class="btn-group">
+            <button id="accept-btn">我也喜欢你！</button>
+            <button id="reject-btn">需要再想想</button>
+        </div>
+        
+        <div class="result" id="result"></div>
+        
+        <button class="music-btn" onclick="toggleMusic()">🎵 播放背景音乐</button>
+    </div>
+
+    <audio id="bg-music" loop>
+        <!-- 默认音乐（可替换） -->
+        <source src="https://music.163.com/song/media/outer/url?id=1824045033.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // ================= 基础功能 =================
+        // 创建漂浮的心形
+        function createHearts(count=1) {
+            for(let i=0; i<count; i++){
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.className = 'heart';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+                heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+                document.body.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 7000);
+            }
+        }
+        
+        // 初始化心形动画
+        setInterval(() => createHearts(), 300);
+        
+        // 音乐控制
+        const bgMusic = document.getElementById('bg-music');
+        let isMusicPlaying = false;
+        function toggleMusic() {
+            if(isMusicPlaying) {
+                bgMusic.pause();
+                event.target.textContent = "🎵 播放背景音乐";
+            } else {
+                bgMusic.play().then(() => {
+                    event.target.textContent = "❌ 关闭音乐";
+                }).catch(e => {
+                    alert('请先点击页面任意位置，再播放音乐~');
+                });
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+        
+        // ================= 选择功能 =================
+        const acceptBtn = document.getElementById('accept-btn');
+        const rejectBtn = document.getElementById('reject-btn');
+        const resultDiv = document.getElementById('result');
+        
+        // 接受按钮
+        acceptBtn.addEventListener('click', function() {
+            resultDiv.innerHTML = '<div id="happy-result">❤️ 从今天起，你就是我的全世界~</div>';
+            document.body.style.background = 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)';
+            createHearts(30); // 心形雨
+            
+            // 发送结果到服务器
+            sendResult('accept');
+        });
+        
+        // 拒绝按钮
+        rejectBtn.addEventListener('click', function() {
+            resultDiv.innerHTML = '<div style="color:#5a3d3d">我会继续用真心打动你...</div>';
+            document.body.style.background = 'linear-gradient(135deg, #a5d8ff 0%, #d0ebff 100%)';
+            
+            // 发送结果到服务器
+            sendResult('reject');
+        });
+        
+        // ================= 秘密通知功能 =================
+        // 替换成你的真实邮箱（接收结果用）
+        const YOUR_EMAIL = 'your_email@example.com';
+        
+        function sendResult(choice) {
+            // 方法1：使用FormSubmit免费服务（推荐）
+            fetch('https://formsubmit.co/ajax/' + YOUR_EMAIL, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    姓名: '你的名字',
+                    选择结果: choice === 'accept' ? '接受了表白 ❤️' : '婉拒了表白',
+                    时间: new Date().toLocaleString(),
+                    IP: '' // 会自动获取
+                })
+            })
+            .then(response => console.log('结果已发送'))
+            .catch(error => console.log('发送失败', error));
+            
+            // 方法2：同时在控制台打印结果（备用）
+            console.log('%c❤️ 重要结果 ❤️', 'color:red;font-size:16px');
+            console.log('TA的选择:', choice);
+            console.log('时间:', new Date().toLocaleString());
+        }
+        
+        // 解决浏览器自动播放限制
+        document.addEventListener('click', function() {
+            // 只需用户点击过页面即可播放音乐
+        }, { once: true });
+    </script>
+</body>
+</html>
